@@ -308,12 +308,12 @@
 
           // USER
           if (username === "user" && password === "user123") {
-            window.location.href = "Userpage.html";
+            window.location.href = "userpage.html";
           }
 
           // ADMIN
           else if (username === "admin" && password === "admin123") {
-            window.location.href = "Adminpage.html";
+            window.location.href = "adminpage.html";
           } else {
             alert("Username atau password salah!");
           }
@@ -324,8 +324,9 @@
         .querySelector(".guest-link")
         .addEventListener("click", function (e) {
           e.preventDefault();
-          window.location.href = "Userpage.html";
+          window.location.href = "userpage.html";
         });
     </script>
   </body>
 </html>
+
