@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Library - User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --sidebar-bg: #2c3e50;
+            --sidebar-text: #ecf0f1;
+            --sidebar-hover: #34495e;
+            --header-bg: white;
+            --content-bg: #f5f7fa;
+            --card-bg: white;
+            --text-color: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #e0e6ed;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--content-bg);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px 0;
+            transition: all 0.3s;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-icon {
+            font-size: 50px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .user-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .welcome-text {
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #95a5a6;
+            padding: 0 20px 10px 20px;
+            letter-spacing: 1px;
+        }
+        
+        .menu-items {
+            list-style: none;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            text-decoration: none;
+            color: var(--sidebar-text);
+        }
+        
+        .menu-item:hover {
+            background-color: var(--sidebar-hover);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .menu-item.active {
+            background-color: var(--sidebar-hover);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .menu-icon {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .menu-text {
+            font-size: 15px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            min-height: 100vh;
+            transition: margin-left 0.3s;
+        }
+        
+        /* Top Header */
+        .top-header {
+            background-color: var(--header-bg);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Content Area */
+        .content-area {
+            padding: 30px;
+        }
+        
+        /* Profile Container */
+        .profile-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-card {
+            flex: 1;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: 700;
+            margin-right: 25px;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .profile-role {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .profile-status {
+            display: inline-block;
+            background-color: #2ecc71;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .profile-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-subtitle i {
+            color: var(--primary-color);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            width: 180px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .info-value {
+            flex: 1;
+            color: var(--text-secondary);
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 25px 0;
+        }
+        
+        /* User Activities Section */
+        .activities-section {
+            margin-top: 40px;
+        }
+        
+        .activities-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 25px;
+        }
+        
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .activity-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        .card-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* Bookmark & History Sections */
+        .data-section {
+            margin-bottom: 30px;
+        }
+        
+        .data-container {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .data-card {
+            flex: 1;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .data-title i {
+            color: var(--primary-color);
+        }
+        
+        /* Bookmark Items */
+        .bookmark-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .bookmark-item {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .bookmark-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .bookmark-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 15px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        
+        .detail-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .detail-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .delete-btn {
+            background-color: #f8f9fa;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .delete-btn:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        /* History Items */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .history-item.returned {
+            border-left-color: #27ae60;
+        }
+        
+        .history-item.borrowed {
+            border-left-color: #f39c12;
+        }
+        
+        .history-info {
+            flex: 1;
+        }
+        
+        .history-book-title {
+            font-weight: 700;
+            margin-bottom: 3px;
+            font-size: 15px;
+        }
+        
+        .history-date {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+        
+        .history-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-returned {
+            background-color: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .status-borrowed {
+            background-color: #fef5e7;
+            color: #f39c12;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar-header {
+                padding: 20px 10px;
+            }
+            
+            .user-title, .welcome-text, .section-title, .menu-text {
+                display: none;
+            }
+            
+            .menu-item {
+                justify-content: center;
+                padding: 15px 10px;
+            }
+            
+            .menu-icon {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .profile-container, .data-container {
+                flex-direction: column;
+            }
+            
+            .activities-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .top-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #ecf0f1;
+            color: var(--text-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #bdc3c7;
+        }
+
+        .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        }
+
+        .notif-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .notif-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: #e74c3c;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-weight: 600;
+        }
+        </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="user-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 class="user-title">USER</h2>
+            <p class="welcome-text">welcome user</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <h3 class="section-title">MENU</h3>
+                <ul class="menu-items">
+                    <a href="userpage.html" class="menu-item">
+                        <div class="menu-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span class="menu-text">Dashboard</span>
+                    </a>
+                    <a href="userprofil.html" class="menu-item active">
+                        <div class="menu-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="menu-text">Profil</span>
+                    </a>
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <h3 class="section-title">AKTIVITAS</h3>
+                <ul class="menu-items">
+                    <li class="menu-item" onclick="openFeature('bookmark')">
+                        <div class="menu-icon">
+                            <i class="fas fa-bookmark"></i>
+                        </div>
+                        <span class="menu-text">Bookmark</span>
+                    </li>
+                    <li class="menu-item" onclick="openFeature('history')">
+                        <div class="menu-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <span class="menu-text">History</span>
+                    </li>
+                    <li class="menu-item" onclick="openFeature('rekomendasi')">
+                        <div class="menu-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="menu-text">Rekomendasi</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <div class="top-header">
+        <h1 class="page-title">User Profile</h1>    
+
+        <div class="header-actions">
+            <button class="notif-btn">
+                <i class="fas fa-bell"></i>
+                <span class="notif-badge">3</span>
+            </button>
+
+            <button class="logout-btn" onclick="confirmLogout()">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </button>
+        </div>
+    </div>
+
+        <script>
+        function confirmLogout() {
+            let yakin = confirm("Apakah Anda yakin ingin logout?");
+            
+            if (yakin) {
+                window.location.href = "Login.html";
+            }
+        }
+        </script>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Profile Container -->
+            <div class="profile-container">
+                <!-- ================= LEFT : IDENTITAS ================= -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">U</div>
+                        <div class="profile-info">
+                            <h2 class="profile-name">user123</h2>
+                            <p class="profile-role">Anggota Smart Library</p>
+                            <span class="profile-status">Aktif</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-id-card"></i> Identitas User
+                        </h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">ID Anggota</div>
+                                <div class="info-value">USR-2026-001</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Nama Lengkap</div>
+                                <div class="info-value">Fadhil Abdullah</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Kelas</div>
+                                <div class="info-value">XI RPL 2</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Email</div>
+                                <div class="info-value">fadhil@example.com</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Nomor Telepon</div>
+                                <div class="info-value">0812-3456-7890</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Tanggal Bergabung</div>
+                                <div class="info-value">12 Januari 2026</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= RIGHT : BOOKMARK & HISTORY ================= -->
+                <div style="flex:1; display:flex; flex-direction:column; gap:30px;">
+
+                    <!-- BOOKMARK -->
+                    <div class="data-card">
+                        <div class="data-header">
+                            <h3 class="data-title">
+                                <i class="fas fa-bookmark"></i> Bookmark
+                            </h3>
+                        </div>
+
+                        <div class="bookmark-list">
+                            <div class="bookmark-item">
+                                <div class="bookmark-title">Atomic Habits</div>
+                                <small>James Clear</small>
+                            </div>
+
+                            <div class="bookmark-item">
+                                <div class="bookmark-title">Laskar Pelangi</div>
+                                <small>Andrea Hirata</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HISTORY -->
+                    <div class="data-card">
+                        <div class="data-header">
+                            <h3 class="data-title">
+                                <i class="fas fa-history"></i> History Peminjaman
+                            </h3>
+                        </div>
+
+                        <div class="history-list">
+                            <div class="history-item returned">
+                                <div class="history-info">
+                                    <div class="history-book-title">Bumi Manusia</div>
+                                    <div class="history-date">Dipinjam: 10 Jan 2026</div>
+                                </div>
+                                <span class="history-status status-returned">Dikembalikan</span>
+                            </div>
+
+                            <div class="history-item borrowed">
+                                <div class="history-info">
+                                    <div class="history-book-title">Rich Dad Poor Dad</div>
+                                    <div class="history-date">Dipinjam: 02 Feb 2026</div>
+                                </div>
+                                <span class="history-status status-borrowed">Dipinjam</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Library - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --sidebar-bg: #2c3e50;
+            --sidebar-text: #ecf0f1;
+            --sidebar-hover: #34495e;
+            --header-bg: white;
+            --content-bg: #f5f7fa;
+            --card-bg: white;
+            --text-color: #2c3e50;
+            --text-secondary: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--content-bg);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px 0;
+            transition: all 0.3s;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-icon {
+            font-size: 50px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .admin-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .welcome-text {
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #95a5a6;
+            padding: 0 20px 10px 20px;
+            letter-spacing: 1px;
+        }
+        
+        .menu-items {
+            list-style: none;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--sidebar-hover);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .menu-item.active {
+            background-color: var(--sidebar-hover);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .menu-icon {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .menu-text {
+            font-size: 15px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            min-height: 100vh;
+            transition: margin-left 0.3s;
+        }
+        
+        /* Top Header */
+        .top-header {
+            background-color: var(--header-bg);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Content Area */
+        .content-area {
+            padding: 30px;
+        }
+        
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        .card-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+        
+        .card-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .card-trend {
+            font-size: 14px;
+            color: #27ae60;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-trend.down {
+            color: #e74c3c;
+        }
+        
+        /* Recent Activity */
+        .recent-activity {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-header h2 {
+            font-size: 20px;
+            color: var(--text-color);
+        }
+        
+        .activity-list {
+            list-style: none;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e3f2fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .activity-time {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar-header {
+                padding: 20px 10px;
+            }
+            
+            .admin-title, .welcome-text, .section-title, .menu-text {
+                display: none;
+            }
+            
+            .menu-item {
+                justify-content: center;
+                padding: 15px 10px;
+            }
+            
+            .menu-icon {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Modal untuk fitur yang diklik */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #ecf0f1;
+            color: var(--text-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="admin-icon">
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <h2 class="admin-title">ADMIN</h2>
+            <p class="welcome-text">welcome admin</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <h3 class="section-title">MENU</h3>
+                <ul class="menu-items">
+                    <li class="menu-item active" data-section="dashboard">
+                        <div class="menu-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span class="menu-text">Dashboard</span>
+                    </li>
+                    <li class="menu-item" onclick="goToProfile()">
+                        <div class="menu-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="menu-text">Profil</span>
+                    </li>
+
+                    <script>
+                    function goToProfile() {
+                        window.location.href = "adminprofil.html";
+                    }
+
+                    function logout() {
+                        if (confirm("Apakah Anda yakin ingin logout?")) {
+                            window.location.href = "login.html";
+                        }
+                    }
+                    </script>
+
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <h3 class="section-title">MANAGEMEN</h3>
+                <ul class="menu-items">
+                    <li class="menu-item" data-section="manage-member">
+                        <div class="menu-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="menu-text">Kelola Anggota</span>
+                    </li>
+                    <li class="menu-item" data-section="manage-book">
+                        <div class="menu-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <span class="menu-text">Kelola Buku</span>
+                    </li>
+                    <li class="menu-item" data-section="view-request">
+                        <div class="menu-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <span class="menu-text">Kelola Peminjaman Buku</span>
+                    </li>
+                    <li class="menu-item" onclick="goToRedeem()">
+                        <div class="menu-icon">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <span class="menu-text">Kelola Redeem Code</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <h3 class="section-title">COMMUNICATION</h3>
+                <ul class="menu-items">
+                    <li class="menu-item" data-section="see-feedback">
+                        <div class="menu-icon">
+                            <i class="fas fa-comment-alt"></i>
+                        </div>
+                        <span class="menu-text">Lihat Feedback</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <div class="top-header">
+        <div class="page-title">Dashboard</div>
+    </div>
+
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Total Anggota</div>
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="card-value">1,245</div>
+                    <div class="card-trend">
+                        <i class="fas fa-arrow-up"></i> 12% dari bulan lalu
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Total Buku</div>
+                        <div class="card-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div class="card-value">8,762</div>
+                    <div class="card-trend">
+                        <i class="fas fa-arrow-up"></i> 5% dari bulan lalu
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Peminjaman Aktif</div>
+                        <div class="card-icon">
+                            <i class="fas fa-book-reader"></i>
+                        </div>
+                    </div>
+                    <div class="card-value">342</div>
+                    <div class="card-trend down">
+                        <i class="fas fa-arrow-down"></i> 3% dari bulan lalu
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Permintaan Tertunda</div>
+                        <div class="card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="card-value">28</div>
+                    <div class="card-trend">
+                        <i class="fas fa-arrow-up"></i> 8% dari bulan lalu
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <div class="section-header">
+                    <h2>Aktivitas Terkini</h2>
+                    <a href="#" style="color: var(--primary-color); text-decoration: none;">Lihat Semua</a>
+                </div>
+                
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Buku baru ditambahkan</div>
+                            <div class="activity-time">"Pemrograman Web Modern" oleh Budi Santoso - 10 menit yang lalu</div>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Anggota baru terdaftar</div>
+                            <div class="activity-time">Siska Wijaya (Kelas XII IPA 2) - 1 jam yang lalu</div>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Peminjaman buku diproses</div>
+                            <div class="activity-time">"Sejarah Indonesia" dipinjam oleh Andi Pratama - 2 jam yang lalu</div>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Pesan dikirim ke pengguna</div>
+                            <div class="activity-time">Pengingat pengembalian buku untuk 5 anggota - 3 jam yang lalu</div>
+                        </div>
+                    </li>
+                    
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Umpan balik baru diterima</div>
+                            <div class="activity-time">Dari Rina Safitri mengenai pengalaman menggunakan aplikasi - 5 jam yang lalu</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal untuk fitur yang dik

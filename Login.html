@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Library - Login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .login-container {
+        display: flex;
+        width: 100%;
+        max-width: 1000px;
+        min-height: 600px;
+        background-color: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Login Form (Kiri) */
+      .login-form {
+        flex: 1;
+        padding: 60px 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .form-title {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .form-subtitle {
+        color: #7f8c8d;
+        font-size: 16px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 15px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e6ed;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #3498db;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .btn-back {
+        background-color: #f8f9fa;
+        color: #495057;
+        border: 2px solid #e0e6ed;
+      }
+
+      .btn-back:hover {
+        background-color: #e9ecef;
+      }
+
+      .btn-login {
+        background-color: #3498db;
+        color: white;
+      }
+
+      .btn-login:hover {
+        background-color: #2980b9;
+      }
+
+      .guest-section {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 1px solid #eee;
+      }
+
+      .guest-label {
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .guest-link {
+        color: #3498db;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 16px;
+      }
+
+      .guest-link:hover {
+        text-decoration: underline;
+      }
+
+      /* Side Image (Kanan) */
+      .login-side {
+        flex: 1;
+        background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        color: white;
+        position: relative;
+      }
+
+      .login-side::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+      }
+
+      .library-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        z-index: 1;
+      }
+
+      .side-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-align: center;
+        z-index: 1;
+      }
+
+      .side-subtitle {
+        font-size: 18px;
+        text-align: center;
+        max-width: 300px;
+        opacity: 0.9;
+        z-index: 1;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .login-container {
+          flex-direction: column;
+          max-width: 500px;
+        }
+
+        .login-form {
+          order: 2;
+          padding: 40px 30px;
+        }
+
+        .login-side {
+          order: 1;
+          padding: 30px 20px;
+          min-height: 200px;
+        }
+
+        .library-icon {
+          font-size: 60px;
+        }
+
+        .side-title {
+          font-size: 24px;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <!-- Form Login (Kiri) -->
+      <div class="login-form">
+        <div class="form-header">
+          <h2 class="form-title">WELCOME TO SMART LIBRARY</h2>
+          <p class="form-subtitle">
+            Masuk ke akun Anda untuk mengakses koleksi buku digital
+          </p>
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username" class="form-label">USERNAME</label>
+            <input
+              type="text"
+              id="username"
+              class="form-input"
+              placeholder="Masukkan username"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">PASSWORD</label>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="Masukkan password"
+              required
+            />
+          </div>
+
+          <div class="button-group">
+            <a href="index.html" class="btn btn-back">Kembali</a>
+            <button type="submit" class="btn btn-login">MASUK</button>
+          </div>
+        </form>
+
+        <div class="guest-section">
+          <span class="guest-label">Atau masuk sebagai</span>
+          <a href="#" class="guest-link">Guest</a>
+        </div>
+      </div>
+
+      <!-- Side dengan gambar dan informasi (Kanan) -->
+      <div class="login-side">
+        <div class="library-icon">
+          <i class="fas fa-book-reader"></i>
+        </div>
+        <h1 class="side-title">Smart Library</h1>
+        <p class="side-subtitle">
+          Perpustakaan digital sekolah dengan banyak buku pilihan untuk siswa
+          dan guru
+        </p>
+        <br>
+        <p>
+            Untuk pembuatan akun harap menuju ke perpustakaan
+        </p>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          // USER
+          if (username === "user" && password === "user123") {
+            window.location.href = "Userpage.html";
+          }
+
+          // ADMIN
+          else if (username === "admin" && password === "admin123") {
+            window.location.href = "Adminpage.html";
+          } else {
+            alert("Username atau password salah!");
+          }
+        });
+
+      // Guest
+      document
+        .querySelector(".guest-link")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          window.location.href = "Userpage.html";
+        });
+    </script>
+  </body>
+</html>
